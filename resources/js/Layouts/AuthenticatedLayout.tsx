@@ -5,10 +5,11 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
-export default function Authenticated({
+export default function AuthenticatedLayout({
     header,
+    extra,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+}: PropsWithChildren<{ header?: ReactNode; extra?: ReactNode }>) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -32,6 +33,12 @@ export default function Authenticated({
                                     active={route().current('dashboard')}
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    href={route('products.viewAll')}
+                                    active={route().current('products.viewAll')}
+                                >
+                                    Products
                                 </NavLink>
                             </div>
                         </div>
@@ -137,6 +144,13 @@ export default function Authenticated({
                         >
                             Dashboard
                         </ResponsiveNavLink>
+
+                        <ResponsiveNavLink
+                            href={route('products.viewAll')}
+                            active={route().current('products.viewAll')}
+                        >
+                            Products
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
@@ -167,13 +181,14 @@ export default function Authenticated({
 
             {header && (
                 <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <div className="mx-auto flex max-w-7xl justify-between px-4 py-6 sm:px-6 lg:px-8">
                         {header}
+                        {extra}
                     </div>
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="p-8">{children}</main>
         </div>
     );
 }

@@ -12,3 +12,13 @@ export type PageProps<
         user: User;
     };
 };
+
+export type Product = {
+    created_at: Date;
+    description: string;
+    image: string;
+    id: number;
+    price: number;
+    rating: number;
+    title: string;
+};
