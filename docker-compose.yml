@@ -1,0 +1,46 @@
+services:
+    app:
+        container_name: laravel-app
+        build:
+            context: .
+        networks:
+            - docker-network
+        ports:
+            - '5173:5173'
+        volumes:
+            - .:/var/www/html
+
+    web:
+        image: nginx:alpine
+        container_name: laravel-nginx
+        ports:
+            - 8000:80
+        volumes:
+            - .:/var/www
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - docker-network
+
+    db:
+        container_name: laravel-db
+        image: mysql:5.7
+        env_file:
+            - .env
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - '3306:3306'
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - docker-network
+
+volumes:
+    dbdata:
+
+networks:
+    docker-network:
+        driver: bridge
